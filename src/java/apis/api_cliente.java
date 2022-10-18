@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -38,5 +43,33 @@ public class api_cliente {
             System.out.println("Error api:" + ex.getMessage());
         }
         return salida;
+    }
+    public DefaultTableModel leer(){
+        DefaultTableModel tabla = new DefaultTableModel();
+        try{
+            String encabezado[] = {"id","NIT","NOmbres","Apellidos","Direccion","Telefono","Nacimiento"};
+            tabla.setColumnIdentifiers(encabezado);
+            String datos[] = new String[7];
+            JSONArray arreglo = new JSONArray(get());
+            
+            for(int indice = 0;indice < arreglo.length();indice++){
+                JSONObject atributo = arreglo.getJSONObject(indice);
+                datos[0]=String.valueOf(atributo.getInt("idcliente"));
+                datos[1]=atributo.getString("nit");
+                datos[1]=atributo.getString("nombres");
+                datos[1]=atributo.getString("apellidos");
+                datos[1]=atributo.getString("direccion");
+                datos[1]=atributo.getString("Telefono");
+                datos[1]=atributo.getString("fecha_nacimiento");
+                tabla.addRow(datos);
+            }
+        }catch(JSONException ex){
+            System.out.println("Error tabla:" + ex.getMessage());
+        }
+    return tabla;
+    }
+
+    private void getJSONObject(int indice) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
